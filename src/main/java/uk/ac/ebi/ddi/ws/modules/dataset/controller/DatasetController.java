@@ -10,6 +10,8 @@ import com.wordnik.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -32,7 +34,10 @@ import uk.ac.ebi.ddi.ws.modules.dataset.model.DatasetDetail;
 import uk.ac.ebi.ddi.ws.modules.dataset.util.RepoDatasetMapper;
 import uk.ac.ebi.ddi.ws.util.Constants;
 import uk.ac.ebi.ddi.ws.util.WsUtilities;
+import uk.ac.ebi.ddi.ws.util.user.User;
+import uk.ac.ebi.ddi.ws.util.user.UserRepository;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -66,6 +71,9 @@ public class DatasetController {
     @Autowired
     private DictionaryClient dictionaryClient;
 
+    @Resource
+    UserRepository userRepository;
+
 
     @ApiOperation(value = "Search for datasets in the resource", position = 1, notes = "retrieve datasets in the resource using different queries")
     @RequestMapping(value = "/search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -84,9 +92,27 @@ public class DatasetController {
             @RequestParam(value = "size", required = false, defaultValue = "20") int size,
             @ApiParam(value = "the starting point for the search, e.g: 0")
             @RequestParam(value = "faceCount", required = false, defaultValue = "20") int facetCount,
+            @RequestParam(value = "userId", required = false) String userId,
+            @RequestParam(value = "accessToken", required = false) String accessToken,
             HttpServletRequest httpServletRequest) {
 
+        System.out.println("userId:" + userId);
+        System.out.println("accessToken:" + accessToken);
+        System.out.println("query: " + query);
 
+//        ApplicationContext ctx = new ClassPathXmlApplicationContext("META-INF/spring/app-context-bootstrap.xml");
+//        UserRepository userRepository = ctx.getBean(UserRepository.class);
+
+//        UserRepository userRepository;
+
+//        if(null != userId && userId.equals("") && null != accessToken && accessToken.equals("")) {
+            System.out.println("get userid and accesstoken");
+        System.out.println(userRepository.checkUser(userId, accessToken));
+            if(userRepository.checkUser(userId, accessToken)) {
+                System.out.println("checked userid and accesstoken");
+                userRepository.insertKeyWorld(userId, query);
+            }
+//        }
 
         query = (query == null || query.isEmpty() || query.length() == 0)? "*:*": query;
 

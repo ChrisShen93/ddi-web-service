@@ -66,6 +66,8 @@
     <bean id="enrichmentService" class="uk.ac.ebi.ddi.service.db.service.enrichment.EnrichmentInfoService"/>
     <bean id="datasetStatInfoService" class="uk.ac.ebi.ddi.service.db.service.similarity.DatasetStatInfoService"/>
 
+    <bean id="userRepository" class="uk.ac.ebi.ddi.ws.util.user.UserRepositoryImpl"></bean>
+
     <bean class="uk.ac.ebi.ddi.service.db.utils.CascadingMongoEventListener" />
 
     <!--&lt;!&ndash;<bean id="annotService" class="uk.ac.ebi.ddi.annotation.service.DDIAnnotationService"/>&ndash;&gt;-->
