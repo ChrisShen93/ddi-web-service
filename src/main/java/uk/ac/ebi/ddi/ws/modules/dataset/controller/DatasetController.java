@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import sun.util.calendar.LocalGregorianCalendar;
 import uk.ac.ebi.ddi.ebe.ws.dao.client.dataset.DatasetWsClient;
 import uk.ac.ebi.ddi.ebe.ws.dao.client.dictionary.DictionaryClient;
 import uk.ac.ebi.ddi.ebe.ws.dao.client.domain.DomainWsClient;
@@ -36,11 +37,14 @@ import uk.ac.ebi.ddi.ws.util.Constants;
 import uk.ac.ebi.ddi.ws.util.WsUtilities;
 import uk.ac.ebi.ddi.ws.util.user.User;
 import uk.ac.ebi.ddi.ws.util.user.UserRepository;
+import uk.ac.ebi.ddi.ws.util.userLog.Log;
+import uk.ac.ebi.ddi.ws.util.userLog.LogRepository;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -74,6 +78,9 @@ public class DatasetController {
     @Resource
     UserRepository userRepository;
 
+    @Resource
+    LogRepository logRepository;
+
 
     @ApiOperation(value = "Search for datasets in the resource", position = 1, notes = "retrieve datasets in the resource using different queries")
     @RequestMapping(value = "/search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -96,22 +103,37 @@ public class DatasetController {
             @RequestParam(value = "accessToken", required = false) String accessToken,
             HttpServletRequest httpServletRequest) {
 
-        System.out.println("userId:" + userId);
-        System.out.println("accessToken:" + accessToken);
-        System.out.println("query: " + query);
-
-//        ApplicationContext ctx = new ClassPathXmlApplicationContext("META-INF/spring/app-context-bootstrap.xml");
-//        UserRepository userRepository = ctx.getBean(UserRepository.class);
-
-//        UserRepository userRepository;
+        System.out.println("userId from angularjs:" + userId);
+        System.out.println("accessToken from angularjs:" + accessToken);
+        System.out.println("query from angularjs: " + query);
 
 //        if(null != userId && userId.equals("") && null != accessToken && accessToken.equals("")) {
             System.out.println("get userid and accesstoken");
-        System.out.println(userRepository.checkUser(userId, accessToken));
-            if(userRepository.checkUser(userId, accessToken)) {
+            System.out.println(userRepository.checkUser(userId, accessToken));
+            System.out.println("debug");
+
+            List<Map> records = new ArrayList<>();
+            Map<String, String> record = new HashMap<>();
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            record.put("date", sdf.format(new Date()));
+            record.put("keyword", query);
+            records.add(record);
+
+//            if(userRepository.checkUser(userId, accessToken)) {
                 System.out.println("checked userid and accesstoken");
-                userRepository.insertKeyWorld(userId, query);
-            }
+                if (logRepository.getObject(userId) != null) {
+                    System.out.println("userid != null");
+                    List<Map> preRecords = ((Log) logRepository.getObject(userId)).getRecords();
+                    records.addAll(preRecords);
+                    logRepository.updateRecords(userId, records);
+                } else {
+                    System.out.println("userid == null");
+                    logRepository.saveObject(new Log(userId, records));
+                }
+//                logRepository.insertKeyWorld(userId, query);
+//            }
 //        }
 
         query = (query == null || query.isEmpty() || query.length() == 0)? "*:*": query;
