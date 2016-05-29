@@ -68,6 +68,7 @@
 
     <bean id="userRepository" class="uk.ac.ebi.ddi.ws.util.user.UserRepositoryImpl"></bean>
     <bean id="logRepository" class="uk.ac.ebi.ddi.ws.util.userLog.LogRepositoryImpl"></bean>
+    <bean id="recordRepository" class="uk.ac.ebi.ddi.ws.util.specificSearch.RecordRepositoryImpl"></bean>
 
     <bean class="uk.ac.ebi.ddi.service.db.utils.CascadingMongoEventListener" />
 

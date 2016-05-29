@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -77,16 +78,25 @@ public class SigninController {
         return jsonObject;
     }
 
+    @RequestMapping(value = "/github")
+    public @ResponseBody String test() {
+        System.out.println("signin/github");
+        return "111";
+    }
+
     @RequestMapping(value = "/getCode", produces = "application/json; charset=utf-8")
     public @ResponseBody String getCode(@RequestParam String code) {
         System.out.println(code);
+
+        Environment evn = null;
 
         StringBuffer bufferRes = new StringBuffer();
 
         String getATurl = "https://graph.facebook.com/v2.3/oauth/access_token?client_id=1139710409407100&redirect_uri=http://localhost:8000/Tools/omicsdi&client_secret=f8a0b714aa8ef1fe3b873d83a34426ce&code=" + code;
         String access_token = getAccessToken(getATurl);
 
-        String profileUrl = "https://graph.facebook.com/me?access_token=" + access_token;
+        String profileUrl = evn.getProperty("oauth.facebook.graph.baseUrl") + evn.getProperty("oauth.facebook.graph.profile") + access_token;
+//        String profileUrl = "https://graph.facebook.com/me?access_token=" + access_token;
         JsonObject profile = getProfile(profileUrl);
         profile.addProperty("access_token", access_token);
 

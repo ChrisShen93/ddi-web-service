@@ -115,9 +115,10 @@ public class DatasetController {
             List<Map> records = new ArrayList<>();
             Map<String, String> record = new HashMap<>();
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-            record.put("date", sdf.format(new Date()));
+//            record.put("date", sdf.format(new Date()));
+            record.put("date", Long.toString(new Date().getTime()));
             record.put("keyword", query);
             records.add(record);
 
