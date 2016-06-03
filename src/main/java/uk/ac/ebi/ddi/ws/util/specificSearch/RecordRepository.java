@@ -3,6 +3,7 @@ package uk.ac.ebi.ddi.ws.util.specificSearch;
 import com.mongodb.WriteResult;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by chris on 16-5-27.
@@ -14,5 +15,5 @@ public interface RecordRepository<T> {
 
     T getObject(String userId);
 
-    WriteResult updateRecord(String userId, List records);
+    WriteResult updateRecord(String userId, Map<String, String> records);
 }

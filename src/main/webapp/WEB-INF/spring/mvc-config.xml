@@ -14,14 +14,28 @@
 
     <context:component-scan base-package="uk.ac.ebi.ddi.ws.modules"/>
 
-    <beans:bean id="ebeyeWsConfigDev" class="uk.ac.ebi.ddi.ebe.ws.dao.config.EbeyeWsConfigDev" />
+    <beans:bean id="ebeyeWsConfigDev" class="uk.ac.ebi.ddi.ebe.ws.dao.config.EbeyeWsConfigDev"/>
+
+    <!--<beans:bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter"/>-->
+
+    <!--<beans:bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">-->
+        <!--<property name="messageConverters">-->
+            <!--<list>-->
+                <!--&lt;!&ndash;<ref bean="mappingJacksonHttpMessageConverter"/>&ndash;&gt;-->
+                <!--&lt;!&ndash; 新增的StringMessageConverter bean&ndash;&gt;-->
+                <!--<ref bean="stringHttpMessageConverter"/>-->
+                <!--&lt;!&ndash;<ref bean="jsonHttpMessageConverter"/>&ndash;&gt;-->
+                <!--&lt;!&ndash;<ref bean="formHttpMessageConverter"/>&ndash;&gt;-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</beans:bean>-->
 
     <!-- Swagger config (REST service documentation)-->
     <!-- Swagger beans -->
-    <beans:bean class="com.mangofactory.swagger.configuration.SpringSwaggerConfig" />
+    <beans:bean class="com.mangofactory.swagger.configuration.SpringSwaggerConfig"/>
     <beans:bean class="uk.ac.ebi.ddi.ws.swagger.SwaggerConfig"/>
     <!-- static resources mapping for Swagger UI -->
-    <resources mapping="/**" location="/resources/" />
+    <resources mapping="/**" location="/resources/"/>
     <!-- pick up the properties needed for our Swagger configuration -->
     <!--<context:property-placeholder location="classpath:META-INF/props/swagger.properties" ignore-unresolvable="true"/>-->
 

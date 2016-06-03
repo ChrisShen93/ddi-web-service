@@ -103,14 +103,7 @@ public class DatasetController {
             @RequestParam(value = "accessToken", required = false) String accessToken,
             HttpServletRequest httpServletRequest) {
 
-        System.out.println("userId from angularjs:" + userId);
-        System.out.println("accessToken from angularjs:" + accessToken);
-        System.out.println("query from angularjs: " + query);
-
-//        if(null != userId && userId.equals("") && null != accessToken && accessToken.equals("")) {
-            System.out.println("get userid and accesstoken");
-            System.out.println(userRepository.checkUser(userId, accessToken));
-            System.out.println("debug");
+        if(null != userId && userId.length()>0 && null != accessToken && accessToken.length()>0) {
 
             List<Map> records = new ArrayList<>();
             Map<String, String> record = new HashMap<>();
@@ -122,20 +115,18 @@ public class DatasetController {
             record.put("keyword", query);
             records.add(record);
 
-//            if(userRepository.checkUser(userId, accessToken)) {
+            if(userRepository.checkUser(userId, accessToken)) {
                 System.out.println("checked userid and accesstoken");
                 if (logRepository.getObject(userId) != null) {
-                    System.out.println("userid != null");
                     List<Map> preRecords = ((Log) logRepository.getObject(userId)).getRecords();
                     records.addAll(preRecords);
                     logRepository.updateRecords(userId, records);
                 } else {
-                    System.out.println("userid == null");
                     logRepository.saveObject(new Log(userId, records));
                 }
 //                logRepository.insertKeyWorld(userId, query);
-//            }
-//        }
+            }
+        }
 
         query = (query == null || query.isEmpty() || query.length() == 0)? "*:*": query;
 

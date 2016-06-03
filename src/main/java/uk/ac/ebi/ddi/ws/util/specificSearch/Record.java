@@ -14,12 +14,12 @@ import java.util.Map;
 public class Record {
     @Id
     private String userId;
-    private List<Map> records;
+    private Map<String, String> records;
 
     public Record() {
     }
 
-    public Record(String userId, List<Map> records) {
+    public Record(String userId, Map<String, String> records) {
         this.userId = userId;
         this.records = records;
     }
@@ -32,11 +32,11 @@ public class Record {
         this.userId = userId;
     }
 
-    public List<Map> getRecords() {
+    public Map<String, String> getRecords() {
         return records;
     }
 
-    public void setRecords(List<Map> records) {
+    public void setRecords(Map records) {
         this.records = records;
     }
 }

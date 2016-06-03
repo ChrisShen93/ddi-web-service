@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.query.Update;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by chris on 16-5-27.
@@ -32,8 +33,13 @@ public class RecordRepositoryImpl implements RecordRepository<Record> {
         return mongoTemplate.findOne(new Query(Criteria.where("userId").is(userId)), Record.class);
     }
 
+//    @Override
+//    public WriteResult updateRecord(String userId, List records) {
+//        return mongoTemplate.updateFirst(new Query(Criteria.where("userId").is(userId)), Update.update("records", records), Record.class);
+//    }
+
     @Override
-    public WriteResult updateRecord(String userId, List records) {
+    public WriteResult updateRecord(String userId, Map<String, String> records) {
         return mongoTemplate.updateFirst(new Query(Criteria.where("userId").is(userId)), Update.update("records", records), Record.class);
     }
 }

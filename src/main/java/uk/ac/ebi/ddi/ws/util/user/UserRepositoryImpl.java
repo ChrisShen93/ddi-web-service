@@ -46,7 +46,6 @@ public class UserRepositoryImpl implements UserRepository<User> {
     public boolean checkUser(String userId, String accessToken) {
         System.out.println(mongoTemplate.findOne(new Query(Criteria.where("userId").is(userId)), User.class));
         if(mongoTemplate.findOne(new Query(Criteria.where("userId").is(userId)), User.class).getAccessToken().equals(accessToken)) {
-            System.out.println(mongoTemplate.findOne(new Query(Criteria.where("userId").is(userId)), User.class));
             return true;
         }
         return false;
